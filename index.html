@@ -713,7 +713,15 @@ function catBadgeClass(cat){if(cat==="Income Tax")return"badge-income";if(cat===
 function tagBadgeClass(tag){if(["Income Tax","TDS","Assessment","Capital Gains","Salary"].includes(tag))return"badge-income";if(["GST","ITC","Refunds","Audit","Annual Return"].includes(tag))return"badge-gst";if(["Customs","SVB","Valuation","Classification"].includes(tag))return"badge-customs";return"badge-other";}
 function fmtDate(d){return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});}
 
+const ARTICLE_SLUGS={
+  5:"UnderstandingtheIncomeTaxAct,2025/",
+  2:"Cross-ChargeorEmploymentKarnatakaHConGSTLiabilityinSecondment/",
+  6:"Ship-toGSTINNowMandatoryinBilltoShiptoTransactions/",
+  4:"SCOMETExportAuthorisationforRepair/"
+};
+
 function openArticle(id,fromPage){
+  if(ARTICLE_SLUGS[id]){window.location.href=ARTICLE_SLUGS[id];return;}
   const a=ARTICLES.find(x=>x.id===id);
   if(!a)return;
   window._prevPage=fromPage||'home';
