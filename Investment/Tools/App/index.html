@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Financial Analyst App | ArticlesByArticle Investment</title>
+<meta name="description" content="Financial Analyst: a free Android app that reads annual report PDFs, builds statement analysis and DCF models, and uses your own Google Gemini API key for AI-written reports.">
+<link rel="canonical" href="https://articlesbyarticle.online/Investment/Tools/App/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Financial Analyst App">
+<meta property="og:description" content="Annual report PDF in, ratios, DCF and an AI-written report out. Bring your own free Gemini API key.">
+<meta property="og:url" content="https://articlesbyarticle.online/Investment/Tools/App/">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navbar:#0E3A57;--hero:#12496E;--ink:#1F3864;--ink-soft:#2E5077;
+  --gold:#CF9F51;--cream:#FAF7F2;--white:#fff;--text:#1A1A1A;--muted:#5F6B76;
+  --border:#E8C4B0;--rule:#D9E2EC;--teal:#2E8B8B;--pos:#1A6B3A;--neg:#B3261E;
+}
+body{font-family:Calibri,Carlito,'Segoe UI',Arial,sans-serif;color:var(--text);background:var(--cream);line-height:1.65;font-size:17px}
+a{color:var(--ink-soft)}
+
+/* nav */
+nav{background:var(--navbar);height:68px;padding:0 2.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
+.brand{position:relative;display:inline-block}
+.brand-name{font-size:24px;font-weight:700;color:#fff;letter-spacing:-.3px;text-decoration:none;white-space:nowrap}
+.ribbon{position:absolute;left:96px;top:-7px;transform:rotate(-20deg);border:1px solid rgba(255,255,255,.55);color:#fff;font-size:11px;font-weight:700;letter-spacing:2.6px;padding:4px 13px;background:rgba(14,58,87,.55);pointer-events:none}
+.nav-links{display:flex;gap:2.1rem;align-items:center}
+.nav-links a{color:#C3CED5;font-size:16px;text-decoration:none}
+.nav-links a:hover,.nav-links a.active{color:#fff}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px}
+.hamburger span{display:block;width:24px;height:2px;background:#fff}
+
+/* hero */
+.hero{background:var(--hero);color:#fff;padding:3.2rem 2.25rem 3rem}
+.hero-in{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.35fr 1fr;gap:2.5rem;align-items:center}
+.crumb{font-size:15px;color:#8FCBEA;margin-bottom:1.6rem}
+.crumb a{color:#8FCBEA;text-decoration:none}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:#8FCBEA;margin-bottom:.6rem}
+.hero h1{font-size:48px;line-height:1.1;font-weight:700;letter-spacing:-.5px;margin-bottom:.8rem}
+.hero p.lead{font-size:19px;color:#C9D6DF;max-width:560px;margin-bottom:1.6rem}
+.btns{display:flex;gap:.8rem;flex-wrap:wrap}
+.btn{display:inline-block;font-family:inherit;font-size:17px;font-weight:700;padding:13px 24px;border-radius:6px;text-decoration:none;cursor:pointer;border:none}
+.btn.primary{background:var(--gold);color:#1b1b1b}
+.btn.primary:hover{background:#dcae62}
+.btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.55)}
+.btn.ghost:hover{background:rgba(255,255,255,.1)}
+.meta{margin-top:1.1rem;font-size:15px;color:#9FB6C6}
+.meta b{color:#fff;font-weight:600}
+
+/* phone mock */
+.phone{justify-self:center;width:250px;background:#0b2a40;border-radius:30px;padding:12px;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.screen{background:#F6F8FA;border-radius:20px;padding:14px;color:var(--text);min-height:400px}
+.s-top{font-weight:700;font-size:16px;color:var(--ink);margin-bottom:10px}
+.s-card{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:10px;margin-bottom:9px;font-size:14px}
+.s-card small{display:block;color:var(--muted);font-size:12px}
+.s-row{display:flex;justify-content:space-between;font-size:13.5px;padding:3px 0;border-bottom:1px dashed var(--rule)}
+.s-row:last-child{border-bottom:none}
+.s-row b{font-variant-numeric:tabular-nums}
+.s-pill{display:inline-block;background:#EAF6EF;color:var(--pos);font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px}
+.s-bars{display:flex;align-items:flex-end;gap:6px;height:64px;margin-top:6px}
+.s-bars i{flex:1;background:var(--ink-soft);border-radius:3px 3px 0 0;display:block}
+.s-bars i:nth-child(2){background:#3b7f9e}.s-bars i:nth-child(3){background:var(--gold)}
+
+/* layout */
+.wrap{max-width:1100px;margin:0 auto;padding:2.5rem 2.25rem 1rem}
+h2{font-size:32px;font-weight:700;color:var(--ink);margin:2.8rem 0 .9rem;padding-bottom:.4rem;border-bottom:2px solid var(--ink);scroll-margin-top:84px}
+h2:first-child{margin-top:0}
+h3{font-size:20px;color:var(--ink-soft);margin:1.4rem 0 .5rem}
+p{margin-bottom:1rem}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem}
+.card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1.2rem 1.3rem}
+.card h3{margin-top:0}
+.card p{font-size:16px;color:#333;margin-bottom:0}
+.tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:3px;margin-bottom:.6rem}
+.tag.a{background:#E8EEF9;color:#1A4A8B}.tag.b{background:#EAF6EF;color:var(--pos)}.tag.c{background:#FDF6E6;color:#8a6a0a}
+
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;counter-reset:s}
+.flow .step{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:1rem 1.1rem;position:relative}
+.flow .step::before{counter-increment:s;content:counter(s);display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;font-weight:700;margin-bottom:.5rem}
+.flow .step b{display:block;color:var(--ink);margin-bottom:.2rem}
+.flow .step span{font-size:15.5px;color:#444}
+
+.callout{border-left:4px solid var(--gold);background:#FFFBF3;border-radius:0 8px 8px 0;padding:1rem 1.3rem;margin:1.3rem 0}
+.callout.blue{border-left-color:var(--ink-soft);background:#F2F6FA}
+.callout.red{border-left-color:var(--neg);background:#FDF3F2}
+.callout b.ct{display:block;color:var(--ink);margin-bottom:.3rem}
+.callout p{font-size:16px;margin-bottom:.5rem}.callout p:last-child{margin-bottom:0}
+
+ol.steps{list-style:none;counter-reset:n;margin:1rem 0}
+ol.steps li{counter-increment:n;position:relative;background:#fff;border:1px solid var(--rule);border-radius:10px;padding:1rem 1.2rem 1rem 3.6rem;margin-bottom:.8rem}
+ol.steps li::before{content:counter(n);position:absolute;left:1rem;top:1rem;width:32px;height:32px;border-radius:50%;background:var(--gold);color:#1b1b1b;font-weight:700;display:flex;align-items:center;justify-content:center}
+ol.steps li b{color:var(--ink)}
+ol.steps li p{margin:.3rem 0 0;font-size:16px}
+code,.key{font-family:Consolas,'Courier New',monospace;background:#EEF2F6;border:1px solid var(--rule);border-radius:4px;padding:1px 6px;font-size:15px;word-break:break-all}
+
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--rule);border-radius:8px;overflow:hidden;font-size:16px}
+th{background:var(--ink);color:#fff;text-align:left;padding:9px 12px;font-size:14px;letter-spacing:.5px}
+td{padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.tw{overflow-x:auto}
+
+details{background:#fff;border:1px solid var(--rule);border-radius:8px;padding:.8rem 1.1rem;margin-bottom:.6rem}
+summary{cursor:pointer;font-weight:700;color:var(--ink)}
+details p{margin:.6rem 0 0;font-size:16px}
+
+.dl{background:var(--ink);color:#fff;border-radius:12px;padding:1.8rem;display:flex;gap:1.5rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:2rem}
+.dl h3{color:#fff;margin:0 0 .3rem}
+.dl p{margin:0;color:#C9D6DF;font-size:16px}
+.hash{font-size:13px;color:#9FB6C6;margin-top:.5rem;word-break:break-all}
+
+.disclaimer{background:#F7F5F2;border:1px dashed var(--border);border-radius:8px;padding:1.1rem 1.3rem;margin-top:2rem;font-size:14.5px;color:var(--muted)}
+footer{background:var(--navbar);color:rgba(255,255,255,.65);text-align:center;padding:2rem;font-size:14px;margin-top:3rem}
+footer span{color:var(--gold)}
+
+@media(max-width:900px){
+  nav{padding:0 1rem}
+  .nav-links{display:none;position:absolute;top:68px;left:0;right:0;background:var(--navbar);flex-direction:column;align-items:flex-start;gap:0;padding:.5rem 1.25rem 1rem}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:.7rem 0;width:100%}
+  .hamburger{display:flex}
+  .hero{padding:2rem 1.25rem}
+  .hero-in{grid-template-columns:1fr}
+  .hero h1{font-size:34px}
+  .wrap{padding:1.5rem 1.25rem}
+  .grid3,.grid2,.flow{grid-template-columns:1fr}
+  h2{font-size:26px}
+  .ribbon{left:92px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">
+    <a href="/Investment/" class="brand-name">ArticlesByArticle</a>
+    <span class="ribbon">INVESTMENT</span>
+  </div>
+  <div class="nav-links" id="navLinks">
+    <a href="/Investment/">Overview</a>
+    <a href="/Investment/IPO/">IPO Desk</a>
+    <a href="/Investment/EquityResearchReports/">Research Reports</a>
+    <a href="/Investment/Tools/" class="active">Tools</a>
+  </div>
+  <button class="hamburger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<header class="hero">
+  <div class="hero-in">
+    <div>
+      <div class="crumb"><a href="/Investment/">Investment</a> &middot; <a href="/Investment/Tools/">Tools</a> &middot; Financial Analyst App</div>
+      <div class="eyebrow">Android app &middot; Free</div>
+      <h1>Financial Analyst</h1>
+      <p class="lead">Upload an annual report PDF and get the statements, ratios and a DCF model built for you. Add your own free Google Gemini key and the app writes the report in plain words.</p>
+      <div class="btns">
+        <a class="btn primary" href="Financial-Analyst.apk" download>Download APK</a>
+        <a class="btn ghost" href="#gemini">Get a free Gemini key</a>
+      </div>
+      <div class="meta"><b>Android</b> &middot; about 4.7 MB &middot; package <b>com.sachin.financialanalyst</b> &middot; works without an account</div>
+    </div>
+    <div class="phone" aria-hidden="true">
+      <div class="screen">
+        <div class="s-top">Financial Statement Analysis</div>
+        <div class="s-card"><small>Extraction confidence</small><span class="s-pill">&#10003; Data verified</span></div>
+        <div class="s-card">
+          <div class="s-row"><span>Revenue</span><b>1,83,316</b></div>
+          <div class="s-row"><span>EBITDA</span><b>21,530</b></div>
+          <div class="s-row"><span>PAT</span><b>14,680</b></div>
+          <small style="margin-top:6px">&#8377; Cr &middot; sample figures</small>
+        </div>
+        <div class="s-card"><small>Revenue &middot; EBITDA &middot; PAT</small><div class="s-bars"><i style="height:90%"></i><i style="height:45%"></i><i style="height:38%"></i></div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<h2 id="what">What the app does</h2>
+<p>Financial Analyst turns an annual report into numbers you can check. The app does all the calculating. The AI only reads the finished numbers and writes about them, and it is told never to change or invent a figure.</p>
+<div class="grid3">
+  <div class="card"><span class="tag a">Step one</span><h3>Reads the report</h3><p>Import an annual report as a PDF. The app pulls out the statement tables, shows how confident it is in each row, and runs checks so you can fix anything before you continue. You can also type the figures in by hand.</p></div>
+  <div class="card"><span class="tag b">Step two</span><h3>Analyses the statements</h3><p>All ratios for one financial year, plus what changed once you add a second year. If a figure is missing, the ratio shows n/a. Nothing is estimated.</p></div>
+  <div class="card"><span class="tag c">Step three</span><h3>Builds a DCF</h3><p>Pick historical data, set forecast assumptions under separate scenarios, and see the valuation bridge and a sensitivity grid. Three or more years of history works best.</p></div>
+</div>
+
+<h3>The flow</h3>
+<div class="flow">
+  <div class="step"><b>Import</b><span>Drop the annual report PDF, or enter figures manually.</span></div>
+  <div class="step"><b>Review</b><span>Check extracted rows, confidence and the app's own checks, then confirm.</span></div>
+  <div class="step"><b>Analyse</b><span>Statement analysis and company analysis (DCF) are independent models.</span></div>
+  <div class="step"><b>Report</b><span>Your chosen AI writes a final report from the confirmed numbers.</span></div>
+</div>
+
+<h3>Good to know</h3>
+<ul style="margin:0 0 1rem 1.3rem">
+  <li>Projects are saved on your phone. Signing in is optional.</li>
+  <li>Adding a listed company's price and share count unlocks a Share Details tab.</li>
+  <li>Light and dark themes are included.</li>
+  <li>Statement analysis and DCF are separate: the valuation never depends on the statement analysis.</li>
+</ul>
+<div class="callout red">
+  <b class="ct">Early version</b>
+  <p>Some forecast and valuation screens in this build still show prototype values, and import accepts PDF files only. The on-device offline AI model is marked "coming soon". Treat outputs as a starting point and check them against the source report.</p>
+</div>
+
+<h2 id="ai">Choosing the AI</h2>
+<p>The report writer runs on an AI you choose. The app never switches it without telling you.</p>
+<div class="tw"><table>
+<thead><tr><th>Option</th><th>What it is</th><th>Cost</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td><b>Google Gemini</b> (recommended to start)</td><td>Your own key from Google AI Studio. The app calls <code>gemini-3.8-flash</code> and falls back to <code>gemini-flash-latest</code>.</td><td>Free tier available, no card needed</td><td>Working</td></tr>
+<tr><td><b>Claude</b> (Anthropic)</td><td>Your own API key from Anthropic.</td><td>Paid, per use</td><td>Working</td></tr>
+<tr><td><b>Local AI</b></td><td>Small language model that runs on the phone, offline.</td><td>Free</td><td>Coming soon</td></tr>
+</tbody></table></div>
+
+<h2 id="gemini">Get a free Gemini API key</h2>
+<p>An API key is a long password that lets the app talk to Gemini on your behalf. Getting one takes about two minutes and needs only a Google account.</p>
+<ol class="steps">
+  <li><b>Open Google AI Studio</b><p>Go to <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">aistudio.google.com/app/apikey</a> and sign in with your Google account. Accept the terms if asked.</p></li>
+  <li><b>Click "Create API key"</b><p>Use "Get API key" in the left sidebar if you land elsewhere. Choose an existing Google Cloud project or let AI Studio create one for you.</p></li>
+  <li><b>Copy the key</b><p>It starts with <code>AIza</code>. Keep it private. Do not post it in screenshots, chats or public code.</p></li>
+  <li><b>Open the app: Settings &rarr; AI &amp; API key</b><p>Set <b>Provider</b> to <b>Google Gemini (AI Studio)</b>, paste the key, save, then press <b>Test connection</b>.</p></li>
+  <li><b>Choose Advanced AI</b><p>In the AI picker, select Advanced AI and tick "Remember my AI choice" if you want it kept. Then press <b>Generate report</b> on any analysed company.</p></li>
+</ol>
+
+<div class="grid2">
+  <div class="callout blue">
+    <b class="ct">Free tier limits</b>
+    <p>The free tier is rate limited (requests per minute and per day) and Google changes the numbers and the models it covers from time to time. Check the usage page in AI Studio for your current limits. If the app says "rate limit or free quota reached", wait a minute and try again.</p>
+  </div>
+  <div class="callout">
+    <b class="ct">Privacy on the free tier</b>
+    <p>Google may use prompts and responses on the free tier to improve its products. Do not send confidential or client statements through a free key. Linking billing moves you to the paid tier, which has different data terms. Read Google's current terms before relying on this.</p>
+  </div>
+</div>
+<p>The key is stored only on your device and is sent only to <code>generativelanguage.googleapis.com</code>. You can remove it any time from the same Settings screen. If you think a key leaked, delete it in AI Studio and create a new one.</p>
+
+<h3>Common errors</h3>
+<div class="tw"><table>
+<thead><tr><th>Message in the app</th><th>What to do</th></tr></thead>
+<tbody>
+<tr><td>Add your Gemini API key in Settings first</td><td>No key saved yet. Follow steps 4 to 5 above.</td></tr>
+<tr><td>Gemini rejected the API key</td><td>Typo, extra space, or the key was deleted. Paste it again or create a new one.</td></tr>
+<tr><td>Gemini rate limit or free quota reached</td><td>Wait a minute. If it keeps happening, you have used the day's free quota.</td></tr>
+<tr><td>Could not reach Gemini</td><td>Check internet, VPN or any blocker. If the free tier is not offered in your country you may need to enable billing in AI Studio.</td></tr>
+<tr><td>Gemini model not found</td><td>Google retired a model name. Update the app when a new build is posted here.</td></tr>
+</tbody></table></div>
+
+<h2 id="install">Install on Android</h2>
+<ol class="steps">
+  <li><b>Download the APK</b><p>Tap the button below on your phone, or download on a computer and copy the file across.</p></li>
+  <li><b>Allow the install</b><p>Android will ask you to allow installs from your browser or file manager ("Install unknown apps"). This is normal because the app is not on the Play Store.</p></li>
+  <li><b>Open the file and tap Install</b><p>Then open Financial Analyst from your app drawer.</p></li>
+</ol>
+<div class="dl">
+  <div>
+    <h3>Financial Analyst for Android</h3>
+    <p>Free &middot; about 4.7 MB &middot; direct download from this site</p>
+    <div class="hash">SHA-256: 5ef97081636cc51efdd383524f5418003008445f459ae4dc6cd11d86f641a4ab</div>
+  </div>
+  <a class="btn primary" href="Financial-Analyst.apk" download>Download APK</a>
+</div>
+<p style="font-size:15px;color:var(--muted);margin-top:.7rem">Tip: compare the SHA-256 above with the file you downloaded to make sure it is unchanged. Only install APKs from sources you trust.</p>
+
+<h2 id="faq">Questions</h2>
+<details><summary>Do I need an account?</summary><p>No. Signing in is optional. Projects stay on your device.</p></details>
+<details><summary>Does the AI change my numbers?</summary><p>No. The app calculates every figure. The AI is given the finished numbers and told to quote them exactly and not recalculate.</p></details>
+<details><summary>Which file types can I import?</summary><p>PDF only for now. Scanned PDFs without selectable text may extract poorly, so always review the rows before confirming.</p></details>
+<details><summary>Is there an iPhone version?</summary><p>Not at the moment. This build is Android only.</p></details>
+<details><summary>Can I use it without any AI?</summary><p>Yes. Import, review and the statement and DCF screens work without a key. Only the written report needs an AI.</p></details>
+
+<div class="disclaimer">
+  <p><b>Disclaimer.</b> This app and page are for education. Outputs are generated from the figures you confirm and are not investment, tax or legal advice. AI-written text can contain mistakes, so check it against the source report.</p>
+</div>
+
+</div>
+
+<footer>&copy; 2026 <span>ArticlesByArticle</span> Investment. Tools and research here are for educational purposes only.</footer>
+
+<script>
+document.getElementById('burger').addEventListener('click',function(){
+  document.getElementById('navLinks').classList.toggle('open');
+});
+</script>
+</body>
+</html>
