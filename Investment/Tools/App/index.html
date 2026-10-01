@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Financial Analyst App | ArticlesByArticle Investment</title>
-<meta name="description" content="Financial Analyst: a free Android app that reads annual report PDFs, builds statement analysis and DCF models, and uses your own Google Gemini API key for AI-written reports.">
+<meta name="description" content="Financial Analyst: a free Android app that reads annual report PDFs and Excel files, builds statement analysis and a full DCF valuation, exports to Excel or PDF, and uses your own Google Gemini API key for AI-written reports.">
 <link rel="canonical" href="https://articlesbyarticle.online/Investment/Tools/App/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Financial Analyst App">
-<meta property="og:description" content="Annual report PDF in, ratios, DCF and an AI-written report out. Bring your own free Gemini API key.">
+<meta property="og:description" content="Annual report PDF or Excel in. Ratios, a DCF valuation and an Excel or PDF download out. Bring your own free Gemini API key for AI-written reports.">
 <meta property="og:url" content="https://articlesbyarticle.online/Investment/Tools/App/">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -152,12 +152,12 @@ footer span{color:var(--gold)}
       <div class="crumb"><a href="/Investment/">Investment</a> &middot; <a href="/Investment/Tools/">Tools</a> &middot; Financial Analyst App</div>
       <div class="eyebrow">Android app &middot; Free</div>
       <h1>Financial Analyst</h1>
-      <p class="lead">Upload an annual report PDF and get the statements, ratios and a DCF model built for you. Add your own free Google Gemini key and the app writes the report in plain words.</p>
+      <p class="lead">Upload an annual report PDF or an Excel file and get the statements, ratios and a DCF valuation built for you. Download the work as Excel or PDF. Add your own free Google Gemini key and the app also writes the report in plain words.</p>
       <div class="btns">
         <a class="btn primary" href="Financial-Analyst.apk" download>Download APK</a>
         <a class="btn ghost" href="#gemini">Get a free Gemini key</a>
       </div>
-      <div class="meta"><b>Android</b> &middot; about 4.7 MB &middot; package <b>com.sachin.financialanalyst</b> &middot; works without an account</div>
+      <div class="meta"><b>Android</b> &middot; about 4.7 MB &middot; package <b>com.sachin.financialanalyst</b> &middot; works without an account &middot; Excel and PDF downloads</div>
     </div>
     <div class="phone" aria-hidden="true">
       <div class="screen">
@@ -180,33 +180,67 @@ footer span{color:var(--gold)}
 <h2 id="what">What the app does</h2>
 <p>Financial Analyst turns an annual report into numbers you can check. The app does all the calculating. The AI only reads the finished numbers and writes about them, and it is told never to change or invent a figure.</p>
 <div class="grid3">
-  <div class="card"><span class="tag a">Step one</span><h3>Reads the report</h3><p>Import an annual report as a PDF. The app pulls out the statement tables, shows how confident it is in each row, and runs checks so you can fix anything before you continue. You can also type the figures in by hand.</p></div>
+  <div class="card"><span class="tag a">Step one</span><h3>Reads the report</h3><p>Import one or more annual report PDFs or Excel (.xlsx) files. The app pulls out the statement tables, merges the years, shows how confident it is in each row, and runs checks so you can fix anything before you continue.</p></div>
   <div class="card"><span class="tag b">Step two</span><h3>Analyses the statements</h3><p>All ratios for one financial year, plus what changed once you add a second year. If a figure is missing, the ratio shows n/a. Nothing is estimated.</p></div>
-  <div class="card"><span class="tag c">Step three</span><h3>Builds a DCF</h3><p>Pick historical data, set forecast assumptions under separate scenarios, and see the valuation bridge and a sensitivity grid. Three or more years of history works best.</p></div>
+  <div class="card"><span class="tag c">Step three</span><h3>Values the company</h3><p>The DCF model starts every assumption from your own history. Change any of them on the Assumptions tab and the value per share, WACC and sensitivity grids recalculate. Three or more years of history works best.</p></div>
 </div>
 
 <h3>The flow</h3>
 <div class="flow">
-  <div class="step"><b>Import</b><span>Drop the annual report PDF, or enter figures manually.</span></div>
+  <div class="step"><b>Import</b><span>Drop one or more annual report PDFs or Excel files.</span></div>
   <div class="step"><b>Review</b><span>Check extracted rows, confidence and the app's own checks, then confirm.</span></div>
-  <div class="step"><b>Analyse</b><span>Statement analysis and company analysis (DCF) are independent models.</span></div>
-  <div class="step"><b>Report</b><span>Your chosen AI writes a final report from the confirmed numbers.</span></div>
+  <div class="step"><b>Analyse or value</b><span>Choose statement analysis, company analysis or a DCF model. Each is its own project type.</span></div>
+  <div class="step"><b>Download or report</b><span>Save an Excel or PDF file, or let your chosen AI write a report from the confirmed numbers.</span></div>
 </div>
 
 <h3>Good to know</h3>
 <ul style="margin:0 0 1rem 1.3rem">
   <li>Projects are saved on your phone. Signing in is optional.</li>
-  <li>Adding a listed company's price and share count unlocks a Share Details tab.</li>
+  <li>In Financial Statement Analysis, marking the company as listed and adding its price and share count unlocks a Share Details tab.</li>
   <li>Light and dark themes are included.</li>
-  <li>Statement analysis and DCF are separate: the valuation never depends on the statement analysis.</li>
+  <li>Three project types: Financial Statement Analysis (one year), Company Analysis (two or more years) and DCF Model.</li>
+  <li>Importing works without an AI key. If the AI cannot be reached, the app labels the rows itself and tells you to check them.</li>
 </ul>
 <div class="callout red">
-  <b class="ct">Early version</b>
-  <p>Some forecast and valuation screens in this build still show prototype values, and import accepts PDF files only. The on-device offline AI model is marked "coming soon". Treat outputs as a starting point and check them against the source report.</p>
+  <b class="ct">Limits of this version</b>
+  <p>Scanned PDFs without selectable text are not read (no OCR yet). Entering figures by hand and the on-device offline AI model are marked "coming soon". DCF inputs such as the risk-free rate and beta are estimates you should review. Treat every output as a starting point and check it against the source report.</p>
+</div>
+
+<h2 id="dcf">The DCF model</h2>
+<p>Pick <b>DCF Model</b> when you start a project. After you confirm the statements, the app fills in a full set of forecast assumptions from your own history. You can change any of them. Nothing is hidden: every number in the valuation is calculated from the statements and the assumptions you can see.</p>
+<div class="tw"><table>
+<thead><tr><th>Tab</th><th>What you get</th></tr></thead>
+<tbody>
+<tr><td><b>Statements</b></td><td>The extracted Income Statement, Balance Sheet and Cash Flow rows, with confidence scores and the app's own checks.</td></tr>
+<tr><td><b>Assumptions</b></td><td>Share price and shares, revenue growth and EBIT margin for each of five forecast years, terminal margin, tax rate, D&amp;A, capex, working capital, cost of equity inputs, terminal growth, and cash and debt for the bridge. Each row shows its history next to it. "Reset to history-based defaults" puts them back.</td></tr>
+<tr><td><b>Analysis</b></td><td>The DCF result: intrinsic value per share, upside against the price, WACC, a five-year free cash flow projection, the bridge from enterprise value to equity value, two sensitivity grids and a list of assumption checks.</td></tr>
+<tr><td><b>AI Critique</b></td><td>Your chosen AI reads the finished numbers and points out what looks good, what looks weak, and what to double check.</td></tr>
+<tr><td><b>Report</b></td><td>An AI-written report from the confirmed numbers.</td></tr>
+</tbody></table></div>
+
+<h3>How the valuation is built</h3>
+<ul style="margin:0 0 1rem 1.3rem">
+  <li><b>Free cash flow to firm</b> for five years: EBIT less tax, plus depreciation, less capex, less the change in working capital.</li>
+  <li><b>WACC</b> from the capital asset pricing model: risk-free rate, expected market return and beta give the cost of equity. Cost of debt is the risk-free rate plus a spread. The weights come from market value and borrowings.</li>
+  <li><b>Terminal value</b> with a constant growth rate, discounted back with the fifth-year factor.</li>
+  <li><b>Bridge to equity:</b> enterprise value, plus cash and investments (with an optional haircut), less borrowings, divided by shares outstanding.</li>
+  <li><b>Sensitivity:</b> value per share for WACC against terminal growth, and WACC against terminal EBIT margin.</li>
+  <li><b>Assumption checks</b> flag the usual mistakes: WACC too close to terminal growth, terminal capex below depreciation, an unrealistic reinvestment rate, or a terminal margin above the best year in your history.</li>
+</ul>
+<div class="callout blue">
+  <b class="ct">Add the price and share count</b>
+  <p>Value per share and upside need a share price and the number of shares on the Assumptions tab. Without them the app still shows enterprise and equity value, and WACC treats the company as all equity.</p>
+</div>
+
+<h2 id="export">Download your work</h2>
+<p>Every project has <b>Download Excel</b> and <b>Download PDF</b> buttons at the right end of the tab bar. The Export button on the Report tab saves a PDF. If your browser or phone does not start the download, tap <b>Save file</b> in the box that appears. You stay on the same screen.</p>
+<div class="grid2">
+  <div class="card"><span class="tag b">Excel</span><h3>A workbook that recalculates</h3><p>Sheets for Statements and Analysis. DCF projects add Assumptions, WACC, DCF and Sensitivity, built with live formulas. Yellow cells are inputs. Change one in Excel and the DCF, WACC and both sensitivity grids update. If you generated a critique or report, an AI Text sheet carries it.</p></div>
+  <div class="card"><span class="tag a">PDF</span><h3>A plain printable summary</h3><p>Statements, growth and ratio analysis, the DCF valuation, cash flow projection, both sensitivity grids and the assumption checks, in a simple text-style layout with the AI critique and report at the end if you made them.</p></div>
 </div>
 
 <h2 id="ai">Choosing the AI</h2>
-<p>The report writer runs on an AI you choose. The app never switches it without telling you.</p>
+<p>The AI critique, the report, follow-up questions and row labelling during import run on an AI you choose. The app never switches it without telling you. If the AI cannot be reached during import, the app labels rows by itself and asks you to check them.</p>
 <div class="tw"><table>
 <thead><tr><th>Option</th><th>What it is</th><th>Cost</th><th>Status</th></tr></thead>
 <tbody>
@@ -228,7 +262,7 @@ footer span{color:var(--gold)}
 <div class="grid2">
   <div class="callout blue">
     <b class="ct">Free tier limits</b>
-    <p>The free tier is rate limited (requests per minute and per day) and Google changes the numbers and the models it covers from time to time. Check the usage page in AI Studio for your current limits. If the app says "rate limit or free quota reached", wait a minute and try again.</p>
+    <p>The free tier is rate limited (requests per minute and per day) and Google changes the numbers and the models it covers from time to time. Check the usage page in AI Studio for your current limits. In our own testing one Gemini model allowed only 20 free requests a day. Every critique, report and follow-up question uses one request. If the app says "rate limit or free quota reached", wait a minute and try again.</p>
   </div>
   <div class="callout">
     <b class="ct">Privacy on the free tier</b>
@@ -254,6 +288,7 @@ footer span{color:var(--gold)}
   <li><b>Allow the install</b><p>Android will ask you to allow installs from your browser or file manager ("Install unknown apps"). This is normal because the app is not on the Play Store.</p></li>
   <li><b>Open the file and tap Install</b><p>Then open Financial Analyst from your app drawer.</p></li>
 </ol>
+<!-- TODO: update the size and SHA-256 below to match the new APK build before publishing -->
 <div class="dl">
   <div>
     <h3>Financial Analyst for Android</h3>
@@ -267,9 +302,11 @@ footer span{color:var(--gold)}
 <h2 id="faq">Questions</h2>
 <details><summary>Do I need an account?</summary><p>No. Signing in is optional. Projects stay on your device.</p></details>
 <details><summary>Does the AI change my numbers?</summary><p>No. The app calculates every figure. The AI is given the finished numbers and told to quote them exactly and not recalculate.</p></details>
-<details><summary>Which file types can I import?</summary><p>PDF only for now. Scanned PDFs without selectable text may extract poorly, so always review the rows before confirming.</p></details>
+<details><summary>Which file types can I import?</summary><p>PDF and Excel (.xlsx or .xlsm). You can add several files at once and the app merges their years. For Excel, put each statement on its own sheet, or under its own heading, with a row of years above the numbers. Exports from Screener.in are recognised. Scanned PDFs without selectable text are not read. Always review the rows before confirming.</p></details>
+<details><summary>Can I download the results?</summary><p>Yes. Use Download Excel for a workbook with live formulas or Download PDF for a printable summary.</p></details>
+<details><summary>Where do the DCF assumptions come from?</summary><p>They start from your own statements: recent growth, margins, tax rate, D&amp;A, capex and working capital. The risk-free rate, market return and beta are estimates. Review each one on the Assumptions tab before you rely on the value.</p></details>
 <details><summary>Is there an iPhone version?</summary><p>Not at the moment. This build is Android only.</p></details>
-<details><summary>Can I use it without any AI?</summary><p>Yes. Import, review and the statement and DCF screens work without a key. Only the written report needs an AI.</p></details>
+<details><summary>Can I use it without any AI?</summary><p>Yes. Import, review, the statement analysis, the DCF and the Excel and PDF downloads all work without a key. Only the AI critique, the written report and follow-up questions need one.</p></details>
 
 <div class="disclaimer">
   <p><b>Disclaimer.</b> This app and page are for education. Outputs are generated from the figures you confirm and are not investment, tax or legal advice. AI-written text can contain mistakes, so check it against the source report.</p>
